@@ -378,11 +378,28 @@ window.loadFromCloud = async function(){
 const oldSaveI = saveI;
 
 saveI = function(){
+
+  // 1. เรียกของเดิม (ให้ UI ทำงานปกติ)
   oldSaveI();
-  setTimeout(() => {
-    console.log("หลังเพิ่ม CU= ", CU);
-    saveToCloud(CU);
-  }, 200);
+
+  // 2. ดึงข้อมูลจากฟอร์มโดยตรง
+  const item = {
+    date: document.getElementById("fDate").value,
+    time: document.getElementById("fTime").value,
+    detail: document.getElementById("fDetail").value,
+    place: document.getElementById("fPlace").value,
+    chair: document.getElementById("fChair").value,
+    dress: document.getElementById("fDress").value,
+    unit: document.getElementById("fUnit").value
+  };
+
+  // 3. ใส่เข้า CU เอง
+  CU.push(item);
+
+  console.log("CU ใหม่:", CU);
+
+  // 4. save
+  saveToCloud(CU);
 }
 </script>
 
