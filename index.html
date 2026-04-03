@@ -373,36 +373,45 @@ window.loadFromCloud = async function(){
 }
 </script>
 
-
 <script>
 const oldSaveI = saveI;
 
 saveI = function(){
 
-  // 1. เรียกของเดิม (ให้ UI ทำงานปกติ)
+  // ให้ระบบเดิมทำงานก่อน (มันจะ render ตาราง)
   oldSaveI();
 
-  // 2. ดึงข้อมูลจากฟอร์มโดยตรง
-  const item = {
-    date: document.getElementById("fDate").value,
-    time: document.getElementById("fTime").value,
-    detail: document.getElementById("fDetail").value,
-    place: document.getElementById("fPlace").value,
-    chair: document.getElementById("fChair").value,
-    dress: document.getElementById("fDress").value,
-    unit: document.getElementById("fUnit").value
-  };
+  // 🔥 ดึงข้อมูลจากตารางจริงบนหน้าเว็บ
+  setTimeout(() => {
 
-  // 3. ใส่เข้า CU เอง
-  CU.push(item);
+    const rows = document.querySelectorAll("table tr");
+    let newData = [];
 
-  console.log("CU ใหม่:", CU);
+    rows.forEach((row, i) => {
+      if(i === 0) return; // ข้าม header
 
-  // 4. save
-  saveToCloud(CU);
+      const cols = row.querySelectorAll("td");
+      if(cols.length < 5) return;
+
+      newData.push({
+        date: cols[0]?.innerText || "",
+        time: cols[1]?.innerText || "",
+        detail: cols[2]?.innerText || "",
+        place: cols[3]?.innerText || "",
+        note: cols[4]?.innerText || ""
+      });
+    });
+
+    console.log("ข้อมูลจากตาราง:", newData);
+
+    // 🔥 ใช้ข้อมูลนี้แทน CU ไปเลย
+    CU = newData;
+
+    saveToCloud(CU);
+
+  }, 300);
 }
 </script>
-
 
 <!-- 🔥 โหลดข้อมูลตอนเปิดเว็บ -->
 <script>
