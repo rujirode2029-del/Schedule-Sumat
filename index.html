@@ -358,7 +358,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 window.saveToCloud = async function(data){
-  console.log("กำลังจะเซฟ:", data);
   await setDoc(doc(db, "schedules", "main"), {
     data: data
   });
