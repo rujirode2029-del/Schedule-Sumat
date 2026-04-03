@@ -380,9 +380,9 @@ const oldSaveI = saveI;
 saveI = function(){
   oldSaveI();
   setTimeout(() => {
-    console.log("ก่อน save:", CU);
+    console.log("หลังเพิ่ม CU= ", CU);
     saveToCloud(CU);
-  }, 100);
+  }, 200);
 }
 </script>
 
