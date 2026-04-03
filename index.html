@@ -388,7 +388,7 @@ saveI = function(){
 <script>
 window.addEventListener("load", async () => {
   const cloudData = await loadFromCloud();
-
+  console.log("โหลดจาก cloud:", cloudData);
   if (cloudData && cloudData.length) {
     CU = cloudData;
     data = CU;
