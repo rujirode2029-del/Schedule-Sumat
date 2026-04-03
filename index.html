@@ -376,6 +376,16 @@ window.loadFromCloud = async function(){
   }
   return [];
 }
+window.onload = async () => {
+  const cloudData = await loadFromCloud();
+  
+  if(cloudData && cloudData.length){
+    data = cloudData; // 👈 ใช้แทนข้อมูลเดิม
+  }
+
+  // เรียก render เดิมของคุณ
+  rEvs();
+};
 </script>
 </body>
 </html>
