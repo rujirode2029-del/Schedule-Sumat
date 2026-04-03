@@ -374,12 +374,15 @@ window.loadFromCloud = async function(){
 </script>
 
 
-<!-- 🔥 แก้ฟังก์ชัน saveI() -->
 <script>
 const oldSaveI = saveI;
+
 saveI = function(){
   oldSaveI();
-  saveToCloud(CU);
+  setTimeout(() => {
+    console.log("ก่อน save:", CU);
+    saveToCloud(CU);
+  }, 100);
 }
 </script>
 
