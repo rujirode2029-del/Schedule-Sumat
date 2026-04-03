@@ -342,32 +342,27 @@ function emp(t){return`<div class="emp"><svg viewBox="0 0 24 24" fill="none" str
 function render(){rStats();rCal();rEvs();rebuildUnitSel();if(document.getElementById('sec-week').classList.contains('active'))rWeek();}
 render();
 </script>
+<!-- 🔥 ใส่โค้ดนี้ก่อน </body> ในไฟล์เดิมของคุณ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  
+
 const firebaseConfig = {
   apiKey: "AIzaSyCDgJxQk8RU40Noyb60_040DWayJF-vxlw",
   authDomain: "schedule-sumet.firebaseapp.com",
-  projectId: "schedule-sumet",
-  storageBucket: "schedule-sumet.firebasestorage.app",
-  messagingSenderId: "126633701256",
-  appId: "1:126633701256:web:933b499acbbbf4211a543d",
-  measurementId: "G-K9ST7WRNRF"
+  projectId: "schedule-sumet"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ✅ ฟังก์ชันบันทึก
 window.saveToCloud = async function(data){
   await setDoc(doc(db, "schedules", "main"), {
     data: data
   });
-  console.log("☁️ บันทึกขึ้น Firebase แล้ว");
+  console.log("☁️ saved");
 }
 
-// ✅ ฟังก์ชันโหลด
 window.loadFromCloud = async function(){
   const snap = await getDoc(doc(db, "schedules", "main"));
   if(snap.exists()){
@@ -375,15 +370,33 @@ window.loadFromCloud = async function(){
   }
   return [];
 }
-window.onload = async () => {
+</script>
+
+
+<!-- 🔥 แก้ฟังก์ชัน saveI() -->
+<script>
+const oldSaveI = saveI;
+saveI = function(){
+  oldSaveI();
+  saveToCloud(data);
+}
+</script>
+
+
+<!-- 🔥 โหลดข้อมูลตอนเปิดเว็บ -->
+<script>
+window.addEventListener("load", async () => {
   const cloudData = await loadFromCloud();
 
   if (cloudData && cloudData.length) {
     data = cloudData;
   }
 
-  rEvs(); // render ใหม่
-};
+  if(typeof rEvs === 'function') rEvs();
+  if(typeof renderCal === 'function') renderCal();
+  if(typeof renderWeek === 'function') renderWeek();
+});
 </script>
+
 </body>
 </html>
