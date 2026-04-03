@@ -378,35 +378,21 @@ const oldSaveI = saveI;
 
 saveI = function(){
 
-  // ให้ระบบเดิมทำงานก่อน (มันจะ render ตาราง)
+  // ให้ระบบเดิมทำงานก่อน
   oldSaveI();
 
-  // 🔥 ดึงข้อมูลจากตารางจริงบนหน้าเว็บ
+  // 🔥 ดีเลย์เพื่อให้ CU อัปเดตก่อน
   setTimeout(() => {
 
-    const rows = document.querySelectorAll("table tr");
-    let newData = [];
+    console.log("CU ล่าสุด =", CU);
 
-    rows.forEach((row, i) => {
-      if(i === 0) return; // ข้าม header
+    // ❗ ถ้ายังว่าง แปลว่า saveI ไม่ได้แก้ CU
+    if(!CU || CU.length === 0){
+      console.warn("⚠️ CU ยังว่าง!");
+      return;
+    }
 
-      const cols = row.querySelectorAll("td");
-      if(cols.length < 5) return;
-
-      newData.push({
-        date: cols[0]?.innerText || "",
-        time: cols[1]?.innerText || "",
-        detail: cols[2]?.innerText || "",
-        place: cols[3]?.innerText || "",
-        note: cols[4]?.innerText || ""
-      });
-    });
-
-    console.log("ข้อมูลจากตาราง:", newData);
-
-    // 🔥 ใช้ข้อมูลนี้แทน CU ไปเลย
-    CU = newData;
-
+    // ✅ save ของจริง
     saveToCloud(CU);
 
   }, 300);
@@ -416,13 +402,16 @@ saveI = function(){
 <!-- 🔥 โหลดข้อมูลตอนเปิดเว็บ -->
 <script>
 window.addEventListener("load", async () => {
+
   const cloudData = await loadFromCloud();
+
   console.log("โหลดจาก cloud:", cloudData);
+
   if (cloudData && cloudData.length) {
     CU = cloudData;
-    data = CU;
   }
 
+  // 🔥 ต้อง render ใหม่
   if(typeof rEvs === 'function') rEvs();
   if(typeof renderCal === 'function') renderCal();
   if(typeof renderWeek === 'function') renderWeek();
