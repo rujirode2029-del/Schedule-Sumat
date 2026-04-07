@@ -380,21 +380,7 @@ saveI = function(){
 
   // ให้ระบบเดิมทำงานก่อน
   oldSaveI();
-
-  // 🔥 ดีเลย์เพื่อให้ CU อัปเดตก่อน
-  setTimeout(() => {
-
-    console.log("DATA ล่าสุด =", DATA);
-
-    // ❗ ถ้ายังว่าง แปลว่า saveI ไม่ได้แก้ CU
-    if(!CU || CU.length === 0){
-      console.warn("⚠️ CU ยังว่าง!");
-      return;
-    }
-
-    // ✅ save ของจริง
-    saveToCloud(CU);
-
+  
   }, 300);
 }
 </script>
